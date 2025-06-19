@@ -7,16 +7,16 @@ const { createApp } = Vue;
                     
                     // ব্যক্তিগত তথ্য - এখানে আপনার তথ্য পরিবর্তন করুন
                     personalInfo: {
-                        name: 'আপনার নাম',
-                        title: 'ফুল স্ট্যাক ডেভেলপার',
+                        name: 'জামাল আজাদ',
+                        title: 'ফুল স্ট্যাক ওয়েব ডেভেলপার',
                         bio: 'আমি একজন ফুল স্ট্যাক ওয়েব ডেভেলপার যিনি আধুনিক ওয়েব অ্যাপ্লিকেশন তৈরি করতে পছন্দ করি।',
                         description: 'আমি ৫+ বছরের অভিজ্ঞতা নিয়ে একজন ফুল স্ট্যাক ডেভেলপার। আমি VueJS, Laravel, এবং আধুনিক ওয়েব টেকনোলজি নিয়ে কাজ করি। আমার লক্ষ্য হল ব্যবহারকারী-বান্ধব এবং কার্যকর ওয়েব অ্যাপ্লিকেশন তৈরি করা।',
                         image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
                         details: [
-                            { label: 'বয়স', value: '২৮ বছর' },
-                            { label: 'অবস্থান', value: 'ঢাকা, বাংলাদেশ' },
+                            { label: 'বয়স', value: '৩৫ বছর' },
+                            { label: 'অবস্থান', value: 'চট্টগ্রাম, বাংলাদেশ' },
                             { label: 'অভিজ্ঞতা', value: '৫+ বছর' },
-                            { label: 'ভাষা', value: 'বাংলা, ইংরেজি' }
+                            { label: 'ভাষা', value: 'বাংলা, ইংরেজি, হিন্দি' }
                         ]
                     },
                     
@@ -99,7 +99,7 @@ const { createApp } = Vue;
                         {
                             type: 'email',
                             label: 'ইমেইল',
-                            value: 'your.email@example.com',
+                            value: 'azadiduniya@gmail.com',
                             icon: 'fas fa-envelope'
                         },
                         {
@@ -111,7 +111,7 @@ const { createApp } = Vue;
                         {
                             type: 'address',
                             label: 'ঠিকানা',
-                            value: 'ঢাকা, বাংলাদেশ',
+                            value: 'চট্টগ্রাম, বাংলাদেশ',
                             icon: 'fas fa-map-marker-alt'
                         }
                     ],
