@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আপনার নাম - Personal Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50 scroll-smooth">
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="text-2xl font-bold text-gray-800">
+                        {{ personalInfo.name }}
+                    </div>
+                    <div class="hidden md:flex space-x-8">
+                        <a v-for="item in navigation" :key="item.name" 
+                           :href="item.href" 
+                           class="text-gray-600 hover:text-blue-600 transition-colors duration-200 font-medium">
+                            {{ item.name }}
+                        </a>
+                    </div>
+                    <div class="md:hidden">
+                        <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-600">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu -->
+                <div v-if="mobileMenuOpen" class="md:hidden pb-4">
+                    <a v-for="item in navigation" :key="item.name" 
+                       :href="item.href" 
+                       class="block py-2 text-gray-600 hover:text-blue-600 transition-colors duration-200">
+                        {{ item.name }}
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home" class="min-h-screen flex items-center gradient-bg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+                <div class="fadeInUp">
+                    <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                        হ্যালো, আমি <span class="typing-animation">{{ personalInfo.name }}</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">
+                        {{ personalInfo.bio }}
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#projects" class="bg-white text-gray-800 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-200">
+                            আমার কাজ দেখুন
+                        </a>
+                        <a href="#contact" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-gray-800 transition-colors duration-200">
+                            যোগাযোগ করুন
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">আমার সম্পর্কে</h2>
+                    <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="fadeInUp">
+                        <img :src="personalInfo.image" :alt="personalInfo.name" 
+                             class="w-full max-w-md mx-auto rounded-2xl shadow-lg">
+                    </div>
+                    <div class="fadeInUp">
+                        <h3 class="text-3xl font-bold text-gray-800 mb-6">{{ personalInfo.title }}</h3>
+                        <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                            {{ personalInfo.description }}
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            <div v-for="info in personalInfo.details" :key="info.label" 
+                                 class="border-l-4 border-blue-600 pl-4">
+                                <span class="text-sm font-medium text-gray-500">{{ info.label }}</span>
+                                <p class="text-gray-800 font-semibold">{{ info.value }}</p>
+                            </div>
+                        </div>
+                        
+                        <a href="#contact" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors duration-200 inline-block">
+                            CV ডাউনলোড করুন
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">দক্ষতা</h2>
+                    <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div v-for="skill in skills" :key="skill.name" 
+                         class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                        <div class="text-center">
+                            <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i :class="skill.icon" class="text-2xl text-blue-600"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">{{ skill.name }}</h3>
+                            <div class="space-y-3">
+                                <div v-for="tech in skill.technologies" :key="tech.name" class="flex items-center justify-between">
+                                    <span class="text-gray-600">{{ tech.name }}</span>
+                                    <div class="w-24 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-1000" 
+                                             :style="{width: tech.level + '%'}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">আমার প্রকল্প</h2>
+                    <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div v-for="project in projects" :key="project.id" 
+                         class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+                        <img :src="project.image" :alt="project.title" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">{{ project.title }}</h3>
+                            <p class="text-gray-600 mb-4">{{ project.description }}</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span v-for="tech in project.technologies" :key="tech" 
+                                      class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                                    {{ tech }}
+                                </span>
+                            </div>
+                            <div class="flex gap-4">
+                                <a :href="project.liveUrl" target="_blank" 
+                                   class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    লাইভ দেখুন
+                                </a>
+                                <a :href="project.githubUrl" target="_blank" 
+                                   class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center gap-2">
+                                    <i class="fab fa-github"></i>
+                                    কোড দেখুন
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">যোগাযোগ</h2>
+                    <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="fadeInUp">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6">যোগাযোগের তথ্য</h3>
+                        <div class="space-y-6">
+                            <div v-for="contact in contactInfo" :key="contact.type" 
+                                 class="flex items-center gap-4">
+                                <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center">
+                                    <i :class="contact.icon" class="text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">{{ contact.label }}</p>
+                                    <p class="text-gray-600">{{ contact.value }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-4">সোশ্যাল মিডিয়া</h4>
+                            <div class="flex gap-4">
+                                <a v-for="social in socialLinks" :key="social.name" 
+                                   :href="social.url" target="_blank"
+                                   class="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors duration-200">
+                                    <i :class="social.icon"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="fadeInUp">
+                        <form @submit.prevent="submitForm" class="bg-white p-8 rounded-2xl shadow-lg">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-6">বার্তা পাঠান</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">নাম</label>
+                                    <input v-model="form.name" type="text" required 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">ইমেইল</label>
+                                    <input v-model="form.email" type="email" required 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">বিষয়</label>
+                                    <input v-model="form.subject" type="text" required 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">বার্তা</label>
+                                    <textarea v-model="form.message" rows="4" required 
+                                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"></textarea>
+                                </div>
+                                <button type="submit" 
+                                        class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200">
+                                    বার্তা পাঠান
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <p class="text-gray-400">
+                        © 2024 {{ personalInfo.name }}. সকল অধিকার সংরক্ষিত।
+                    </p>
+                    <p class="text-gray-400 mt-2">
+                        ❤️ দিয়ে তৈরি VueJS এবং Tailwind CSS ব্যবহার করে
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
