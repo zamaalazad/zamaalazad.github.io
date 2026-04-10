@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Mohammad Azad</title>
+  <meta name="description" content="Learn about Mohammad — a personal portfolio on technology, web development, and IT management." />
+  <link rel="canonical" href="./about.html" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] } } } }</script>
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <link rel="stylesheet" href="../styles/custom.css" />
+</head>
+<body>
+<div id="app">
+  <nav-bar></nav-bar>
+
+  <main>
+
+    <!-- ── Hero ───────────────────────────────────────────── -->
+    <section class="hero-gradient py-20 px-5" aria-labelledby="about-heading">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-br from-indigo-400 to-indigo-700 flex items-center justify-center text-white font-extrabold text-4xl shadow-2xl mb-8 fade-in-up">
+          MSA
+        </div>
+        <h1 id="about-heading" class="text-4xl font-extrabold text-slate-900 dark:text-white mb-4 fade-in-up fade-in-up-1">
+          Hey, I'm Mohammad 👋
+        </h1>
+        <p class="text-xl text-slate-500 dark:text-slate-400 leading-relaxed fade-in-up fade-in-up-2">
+          Inventory Controller & IT Manager with a passion for web development and troubleshooting. Actively building scalable digital solutions.
+        </p>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── Story ──────────────────────────────────────────── -->
+    <section class="py-16 px-5" aria-labelledby="story-heading">
+      <div class="max-w-2xl mx-auto">
+        <h2 id="story-heading" class="text-2xl font-bold text-slate-900 dark:text-white mb-6">My Journey</h2>
+        <div class="prose space-y-4">
+          <p>I started my journey earning a Higher Diploma in Computer Science Engineering and later completing Hardware and Network Engineering. Over the past 10 years, my career has spanned IT management, logistics control, and front desk operations in several sectors including healthcare and telecom.</p>
+          <p>Currently serving as an Inventory Controller and IT Manager at Zahrat Al-Khaleej for Gifts in Manama, I ensure both operations and IT infrastructure run seamlessly. I am constantly recommending information technology strategies, building policies, and supervising warehouse deliveries.</p>
+          <p>As a developer, I am deeply experienced in <strong>Web UI/UX design</strong>, <strong>WordPress customization</strong>, and the <strong>Laravel PHP framework</strong>. I tackle complex computing and networking issues with 7 years of troubleshooting expertise.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── What you'll find ───────────────────────────────── -->
+    <section class="py-16 px-5 bg-slate-50 dark:bg-slate-900/50" aria-labelledby="content-heading">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 id="content-heading" class="text-2xl font-bold text-slate-900 dark:text-white">What You'll Find Here</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div v-for="item in pillars" :key="item.title"
+               class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-md transition-all">
+            <div class="text-3xl mb-4">{{ item.emoji }}</div>
+            <h3 class="font-bold text-slate-900 dark:text-white mb-2">{{ item.title }}</h3>
+            <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">{{ item.description }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── Values ─────────────────────────────────────────── -->
+    <section class="py-16 px-5" aria-labelledby="values-heading">
+      <div class="max-w-2xl mx-auto">
+        <h2 id="values-heading" class="text-2xl font-bold text-slate-900 dark:text-white mb-8">What I Believe In</h2>
+        <div class="space-y-5">
+          <div v-for="v in values" :key="v.title" class="flex gap-4">
+            <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0 font-bold text-lg">
+              {{ v.emoji }}
+            </div>
+            <div>
+              <h3 class="font-semibold text-slate-900 dark:text-white mb-0.5">{{ v.title }}</h3>
+              <p class="text-slate-500 dark:text-slate-400 text-sm">{{ v.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── Skills / Tech stack ────────────────────────────── -->
+    <section class="py-16 px-5 bg-slate-50 dark:bg-slate-900/50" aria-labelledby="skills-heading">
+      <div class="max-w-4xl mx-auto">
+        <h2 id="skills-heading" class="text-2xl font-bold text-slate-900 dark:text-white mb-8 text-center">Technology I Work With</h2>
+        <div class="flex flex-wrap justify-center gap-3">
+          <span v-for="skill in skills" :key="skill"
+                class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-sm font-medium text-slate-700 dark:text-slate-300 hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all shadow-sm">
+            {{ skill }}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA ────────────────────────────────────────────── -->
+    <section class="py-16 px-5 text-center" aria-labelledby="cta-heading">
+      <div class="max-w-lg mx-auto">
+        <h2 id="cta-heading" class="text-2xl font-bold text-slate-900 dark:text-white mb-3">Let's Connect</h2>
+        <p class="text-slate-500 dark:text-slate-400 mb-8">Whether you have a question, a collaboration idea, or just want to say hello — I'd love to hear from you.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="contact.html" class="btn-primary">Send a Message</a>
+          <a href="blog.html"    class="btn-secondary">Read the Blog</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <site-footer></site-footer>
+</div>
+
+<script src="../components/navbar.js"></script>
+<script src="../components/footer.js"></script>
+<script>
+const { createApp } = Vue;
+createApp({
+  components: { NavBar: window.NavBar, SiteFooter: window.SiteFooter },
+  data() {
+    return {
+      pillars: [
+        { emoji: '🤖', title: 'AI & Machine Learning',    description: 'Practical guides on using AI tools for real-world development — from prompt engineering to integrating LLMs into products.' },
+        { emoji: '🌐', title: 'Web Development',          description: 'Modern CSS, JavaScript, Vue, and the techniques that make the difference between good and great web experiences.' },
+        { emoji: '⚡', title: 'AI Prompt Library',        description: 'A curated, tested collection of AI prompts for coding, writing, research, summarization, and productivity.' },
+        { emoji: '📰', title: 'Tech News & Explanations', description: 'Monthly digests of the most important developments in tech, plus plain-English explanations of complex new technologies.' },
+      ],
+      values: [
+        { emoji: '🔍', title: 'Clarity over cleverness',    description: 'Good writing explains. I\'d rather you understand something well than be impressed by jargon.' },
+        { emoji: '🛠️', title: 'Practical over theoretical', description: 'Every article aims to be useful. Theory is here to support practice, not replace it.' },
+        { emoji: '📖', title: 'Always learning',            description: 'Technology evolves fast. This blog is a living record of what I\'m learning — and unlearning.' },
+        { emoji: '🤝', title: 'Open and honest',            description: 'When things don\'t work, I say so. When I\'m wrong, I update the article and say why.' },
+      ],
+      skills: [
+        'HTML/CSS/JS', 'Web UI/UX', 'WordPress Dev', 'Laravel PHP', 'Hardware Engineering',
+        'Networking', 'MS Office', 'Photoshop & XD', 'Illustrator', 'Database Management',
+        'Internet Email', 'OS Troubleshooting', 'Responsive Design'
+      ]
+    };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
+

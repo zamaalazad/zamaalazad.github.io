@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Mohammad Azad</title>
+  <meta name="description" content="All articles on technology, AI prompts, web development, and tech news from Mohammad Azad." />
+  <link rel="canonical" href="./blog.html" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] } } } }</script>
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <link rel="stylesheet" href="../styles/custom.css" />
+</head>
+<body>
+<div id="app">
+  <nav-bar></nav-bar>
+
+  <main>
+    <!-- Page Header -->
+    <section class="hero-gradient py-16 px-5" aria-labelledby="blog-heading">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 id="blog-heading" class="text-4xl font-extrabold text-slate-900 dark:text-white mb-3 fade-in-up">All Articles</h1>
+        <p class="text-slate-500 dark:text-slate-400 fade-in-up fade-in-up-1">{{ filteredPosts.length }} articles on tech, AI, and the web</p>
+      </div>
+    </section>
+
+    <section class="py-12 px-5 max-w-6xl mx-auto">
+
+      <!-- Search + Filter bar -->
+      <div class="flex flex-col md:flex-row gap-4 mb-10">
+        <!-- Search -->
+        <div class="relative flex-1">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input
+            v-model="query"
+            type="search"
+            placeholder="Search articles…"
+            aria-label="Search articles"
+            id="search-input"
+            class="form-input pl-9"
+          />
+        </div>
+
+        <!-- Category filter pills -->
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
+          <button
+            v-for="cat in ['All', ...categoryList]" :key="cat"
+            @click="selectedCat = cat"
+            :class="['badge text-sm py-1.5 px-4 cursor-pointer border transition-all', selectedCat === cat ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-indigo-300 dark:hover:border-indigo-500']"
+            :aria-pressed="selectedCat === cat">
+            {{ cat }}
+          </button>
+        </div>
+      </div>
+
+      <!-- No results -->
+      <div v-if="filteredPosts.length === 0" class="text-center py-20">
+        <p class="text-slate-400 text-lg">No articles found for "{{ query }}"</p>
+        <button @click="query = ''; selectedCat = 'All'" class="btn-primary mt-4">Clear filters</button>
+      </div>
+
+      <!-- Article grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <article
+          v-for="post in paginatedPosts"
+          :key="post.id"
+          class="card group">
+          <a :href="'article.html?id=' + post.id" :aria-label="'Read: ' + post.title">
+            <div :class="['h-44 flex items-center justify-center text-5xl', post.bgColor]">{{ post.emoji }}</div>
+          </a>
+          <div class="p-5">
+            <a :href="'category.html?cat=' + post.category.slug" class="badge mb-2">{{ post.category.name }}</a>
+            <h2 class="font-bold text-slate-900 dark:text-white text-base mb-2 leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+              <a :href="'article.html?id=' + post.id">{{ post.title }}</a>
+            </h2>
+            <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-2 mb-4">{{ post.excerpt }}</p>
+            <div class="flex items-center justify-between text-xs text-slate-400">
+              <a :href="'author.html?id=' + post.author.id" class="flex items-center gap-1.5 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-300 font-bold">{{ post.author.initials }}</span>
+                {{ post.author.name }}
+              </a>
+              <span>{{ post.date }} · {{ post.readingTime }} min</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Pagination -->
+      <div v-if="totalPages > 1" class="flex items-center justify-center gap-2 mt-12" aria-label="Pagination">
+        <button
+          @click="currentPage--"
+          :disabled="currentPage === 1"
+          class="w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+          ‹
+        </button>
+        <button
+          v-for="n in totalPages" :key="n"
+          @click="currentPage = n"
+          :class="['w-9 h-9 rounded-lg border text-sm font-medium transition-all', currentPage === n ? 'bg-indigo-600 border-indigo-600 text-white' : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400']"
+          :aria-label="'Page ' + n"
+          :aria-current="currentPage === n ? 'page' : undefined">
+          {{ n }}
+        </button>
+        <button
+          @click="currentPage++"
+          :disabled="currentPage === totalPages"
+          class="w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+          ›
+        </button>
+      </div>
+
+    </section>
+  </main>
+  <site-footer></site-footer>
+</div>
+
+<script src="../components/navbar.js"></script>
+<script src="../components/footer.js"></script>
+<script>
+const { createApp } = Vue;
+createApp({
+  components: { NavBar: window.NavBar, SiteFooter: window.SiteFooter },
+  data() {
+    return {
+      query: '',
+      selectedCat: 'All',
+      currentPage: 1,
+      perPage: 9,
+
+      posts: [
+        { id:1,  title:'Building Smarter: How AI Coding Assistants Are Changing Development', excerpt:'A deep look at how tools like GitHub Copilot and Claude are reshaping development.', category:{ name:'AI', slug:'ai' }, author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 28, 2026', readingTime:7,  emoji:'🤖', bgColor:'bg-indigo-50' },
+        { id:2,  title:'The Art of Clean CSS: Modern Techniques You Should Know',             excerpt:'Container queries, cascade layers — CSS features that improve your stylesheet.',   category:{ name:'Web Dev', slug:'webdev' }, author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 21, 2026', readingTime:6,  emoji:'🎨', bgColor:'bg-pink-50' },
+        { id:3,  title:'10 AI Prompts That Will Supercharge Your Productivity',               excerpt:'Hand-crafted prompts for writing, coding, research, and much more.',                category:{ name:'AI Prompts', slug:'prompts' }, author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 15, 2026', readingTime:5,  emoji:'⚡', bgColor:'bg-amber-50' },
+        { id:4,  title:'Vue 3 Composition API: A Practical Guide',                            excerpt:'Real-world patterns for reactive state and component design with Vue 3.',           category:{ name:'Web Dev', slug:'webdev' }, author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 10, 2026', readingTime:9,  emoji:'💚', bgColor:'bg-green-50' },
+        { id:5,  title:'Understanding Large Language Models: A Visual Explainer',             excerpt:'How transformers and attention mechanisms actually work — visually.',                category:{ name:'Technology', slug:'technology' }, author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 5, 2026', readingTime:11, emoji:'🧠', bgColor:'bg-purple-50' },
+        { id:6,  title:'Tech News Digest: March 2026',                                        excerpt:'The biggest tech stories this month shaping the ecosystem.',                        category:{ name:'Tech News', slug:'news' }, author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 1, 2026', readingTime:4,  emoji:'📰', bgColor:'bg-sky-50' },
+        { id:7,  title:'Getting Started with Web Accessibility',                              excerpt:'Practical ARIA, keyboard navigation, and semantic HTML patterns.',                 category:{ name:'Web Dev', slug:'webdev' }, author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Feb 25, 2026', readingTime:8,  emoji:'♿', bgColor:'bg-teal-50' },
+        { id:8,  title:'Prompt Engineering Cheatsheet 2026',                                  excerpt:'The ultimate reference for crafting effective AI prompts.',                         category:{ name:'AI Prompts', slug:'prompts' }, author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Feb 20, 2026', readingTime:6,  emoji:'📋', bgColor:'bg-orange-50' },
+        { id:9,  title:'The Rise of Edge Computing',                                          excerpt:'Why the future of computation is moving closer to the user.',                       category:{ name:'Technology', slug:'technology' }, author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Feb 15, 2026', readingTime:7,  emoji:'🌐', bgColor:'bg-blue-50' },
+        { id:10, title:'Open Source Highlights: February 2026',                               excerpt:'10 projects from the open source world you need to know about.',                   category:{ name:'Tech News', slug:'news' }, author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Feb 10, 2026', readingTime:5,  emoji:'🔓', bgColor:'bg-lime-50' },
+      ]
+    };
+  },
+  computed: {
+    categoryList() {
+      return [...new Set(this.posts.map(p => p.category.name))];
+    },
+    filteredPosts() {
+      return this.posts.filter(p => {
+        const matchCat = this.selectedCat === 'All' || p.category.name === this.selectedCat;
+        const matchQ   = p.title.toLowerCase().includes(this.query.toLowerCase()) ||
+                         p.excerpt.toLowerCase().includes(this.query.toLowerCase());
+        return matchCat && matchQ;
+      });
+    },
+    totalPages() {
+      return Math.ceil(this.filteredPosts.length / this.perPage);
+    },
+    paginatedPosts() {
+      const start = (this.currentPage - 1) * this.perPage;
+      return this.filteredPosts.slice(start, start + this.perPage);
+    }
+  },
+  watch: {
+    query()       { this.currentPage = 1; },
+    selectedCat() { this.currentPage = 1; }
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
+

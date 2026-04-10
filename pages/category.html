@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Categories — Mohammad Azad</title>
+  <meta name="description" content="Browse articles by topic on Mohammad Azad's portfolio — AI, web development, tech news, AI prompts and more." />
+  <link rel="canonical" href="./category.html" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] } } } }</script>
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <link rel="stylesheet" href="../styles/custom.css" />
+</head>
+<body>
+<div id="app">
+  <nav-bar></nav-bar>
+
+  <main>
+    <!-- Dynamic category header -->
+    <section :class="['py-16 px-5', activeCategory.headerBg]" aria-labelledby="category-heading">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="text-6xl mb-4 fade-in-up">{{ activeCategory.emoji }}</div>
+        <h1 id="category-heading" class="text-4xl font-extrabold text-slate-900 dark:text-white mb-3 fade-in-up fade-in-up-1">
+          {{ activeCategory.name }}
+        </h1>
+        <p class="text-slate-500 dark:text-slate-400 max-w-xl mx-auto fade-in-up fade-in-up-2">{{ activeCategory.description }}</p>
+        <p class="text-indigo-600 dark:text-indigo-400 font-semibold text-sm mt-3 fade-in-up fade-in-up-3">{{ filteredPosts.length }} articles</p>
+      </div>
+    </section>
+
+    <section class="py-12 px-5 max-w-6xl mx-auto">
+
+      <!-- All category pills -->
+      <div class="flex flex-wrap gap-2 mb-10 justify-center" role="group" aria-label="Category selection">
+        <button
+          v-for="cat in categories" :key="cat.slug"
+          @click="activeCatSlug = cat.slug"
+          :class="['flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all', activeCatSlug === cat.slug ? 'bg-indigo-600 text-white border-indigo-600 shadow-md' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400']">
+          <span>{{ cat.emoji }}</span>
+          {{ cat.name }}
+          <span :class="['ml-1 text-xs px-1.5 py-0.5 rounded-full', activeCatSlug === cat.slug ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400']">{{ cat.count }}</span>
+        </button>
+      </div>
+
+      <!-- Articles -->
+      <div v-if="filteredPosts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <article v-for="post in filteredPosts" :key="post.id" class="card group">
+          <a :href="'article.html?id=' + post.id" :aria-label="'Read: ' + post.title">
+            <div :class="['h-40 flex items-center justify-center text-5xl', post.bgColor]">{{ post.emoji }}</div>
+          </a>
+          <div class="p-5">
+            <h2 class="font-bold text-slate-900 dark:text-white text-base mb-2 leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+              <a :href="'article.html?id=' + post.id">{{ post.title }}</a>
+            </h2>
+            <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-2 mb-4">{{ post.excerpt }}</p>
+            <div class="flex items-center justify-between text-xs text-slate-400">
+              <span class="flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-300 font-bold text-xs">{{ post.author.initials }}</span>
+                {{ post.author.name }}
+              </span>
+              <span>{{ post.date }} · {{ post.readingTime }} min</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Empty state for filtered category -->
+      <div v-else class="text-center py-20">
+        <p class="text-4xl mb-4">🔍</p>
+        <p class="text-slate-400">No articles yet in this category. Check back soon!</p>
+      </div>
+    </section>
+
+  </main>
+  <site-footer></site-footer>
+</div>
+
+<script src="../components/navbar.js"></script>
+<script src="../components/footer.js"></script>
+<script>
+const { createApp } = Vue;
+createApp({
+  components: { NavBar: window.NavBar, SiteFooter: window.SiteFooter },
+  data() {
+    /* Read ?cat= from URL to pre-select category */
+    const params = new URLSearchParams(window.location.search);
+    const catFromUrl = params.get('cat') || 'ai';
+
+    return {
+      activeCatSlug: catFromUrl,
+
+      categories: [
+        { name:'AI & ML',           slug:'ai',         emoji:'🤖', count:15, description:'Exploring artificial intelligence, machine learning, and how these technologies are reshaping every industry.', headerBg:'bg-indigo-50 dark:bg-indigo-950/30' },
+        { name:'Web Development',   slug:'webdev',     emoji:'🌐', count:22, description:'Modern frontend and backend development — frameworks, best practices, and deep dives into the web platform.', headerBg:'bg-green-50 dark:bg-green-950/30' },
+        { name:'AI Prompts',        slug:'prompts',    emoji:'⚡', count:30, description:'A curated library of hand-crafted AI prompts for coding, writing, research, and everyday productivity.', headerBg:'bg-amber-50 dark:bg-amber-950/30' },
+        { name:'Technology',        slug:'technology', emoji:'💻', count:18, description:'Explanations of new and emerging technologies — from edge computing to quantum and beyond.', headerBg:'bg-purple-50 dark:bg-purple-950/30' },
+        { name:'Tech News',         slug:'news',       emoji:'📰', count:12, description:'Curated digests of the most important stories in tech, filtered for signal over noise.', headerBg:'bg-sky-50 dark:bg-sky-950/30' },
+        { name:'Tutorials',         slug:'tutorials',  emoji:'📖', count:9,  description:'Step-by-step guides and hands-on tutorials for developers of all levels.', headerBg:'bg-teal-50 dark:bg-teal-950/30' },
+        { name:'Open Source',       slug:'opensource', emoji:'🔓', count:7,  description:'Spotlights on remarkable open source projects, tools, and the communities around them.', headerBg:'bg-lime-50 dark:bg-lime-950/30' },
+        { name:'Career & Tools',    slug:'career',     emoji:'🚀', count:11, description:'Tools, workflows, and strategies to grow as a developer and build a fulfilling tech career.', headerBg:'bg-orange-50 dark:bg-orange-950/30' },
+      ],
+
+      allPosts: [
+        { id:1,  title:'Building Smarter: How AI Coding Assistants Are Changing Development', excerpt:'A deep look at how tools like GitHub Copilot and Claude reshape development', category:'ai', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 28, 2026', readingTime:7,  emoji:'🤖', bgColor:'bg-indigo-50' },
+        { id:2,  title:'The Art of Clean CSS: Modern Techniques You Should Know',             excerpt:'Container queries, cascade layers and more.',                              category:'webdev', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 21, 2026', readingTime:6,  emoji:'🎨', bgColor:'bg-pink-50' },
+        { id:3,  title:'10 AI Prompts That Will Supercharge Your Productivity',               excerpt:'Hand-crafted prompts for writing, coding, and research.',                  category:'prompts', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 15, 2026', readingTime:5,  emoji:'⚡', bgColor:'bg-amber-50' },
+        { id:4,  title:'Vue 3 Composition API: A Practical Guide',                            excerpt:'Real-world patterns for reactive state with Vue 3.',                        category:'webdev', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 10, 2026', readingTime:9,  emoji:'💚', bgColor:'bg-green-50' },
+        { id:5,  title:'Understanding Large Language Models: A Visual Explainer',             excerpt:'How transformers and attention mechanisms actually work.',                   category:'technology', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 5, 2026',  readingTime:11, emoji:'🧠', bgColor:'bg-purple-50' },
+        { id:6,  title:'Tech News Digest: March 2026',                                        excerpt:'Biggest tech stories shaping the ecosystem.',                               category:'news', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Mar 1, 2026',  readingTime:4,  emoji:'📰', bgColor:'bg-sky-50' },
+        { id:7,  title:'Getting Started with Web Accessibility',                              excerpt:'Practical ARIA, keyboard nav, and semantic HTML patterns.',                 category:'webdev', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Feb 25, 2026', readingTime:8,  emoji:'♿', bgColor:'bg-teal-50' },
+        { id:8,  title:'Prompt Engineering Cheatsheet 2026',                                  excerpt:'The ultimate reference for crafting effective AI prompts.',                  category:'prompts', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Feb 20, 2026', readingTime:6,  emoji:'📋', bgColor:'bg-orange-50' },
+        { id:9,  title:'The Rise of Edge Computing',                                          excerpt:'Why computation is moving closer to the user.',                             category:'technology', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Feb 15, 2026', readingTime:7,  emoji:'🌐', bgColor:'bg-blue-50' },
+        { id:10, title:'Open Source Highlights: February 2026',                               excerpt:'10 projects from the open source world you need to know.',                  category:'news', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Feb 10, 2026', readingTime:5,  emoji:'🔓', bgColor:'bg-lime-50' },
+        { id:11, title:'Build a CLI Tool with Node.js',                                       excerpt:'Step-by-step guide to creating your first command-line tool.',              category:'tutorials', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Feb 5, 2026',  readingTime:10, emoji:'🛠️', bgColor:'bg-yellow-50' },
+        { id:12, title:'Top 5 AI Prompts for Content Creation',                               excerpt:'Prompts that produce publication-ready drafts every time.',                 category:'prompts', author:{ id:1, name:'Mohammad Azad', initials:'MSA' }, date:'Feb 2, 2026',  readingTime:4,  emoji:'✍️', bgColor:'bg-rose-50' },
+      ]
+    };
+  },
+  computed: {
+    activeCategory() {
+      return this.categories.find(c => c.slug === this.activeCatSlug) || this.categories[0];
+    },
+    filteredPosts() {
+      return this.allPosts.filter(p => p.category === this.activeCatSlug);
+    }
+  },
+  watch: {
+    activeCatSlug(slug) {
+      /* Update URL without page reload */
+      const url = new URL(window.location);
+      url.searchParams.set('cat', slug);
+      window.history.pushState({}, '', url);
+    }
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
+
