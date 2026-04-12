@@ -133,7 +133,7 @@
       </div>
 
       <!-- Related articles -->
-      <section class="mt-16 pt-10 border-t border-slate-200 dark:border-slate-700" aria-labelledby="related-heading">
+      <!-- <section class="mt-16 pt-10 border-t border-slate-200 dark:border-slate-700" aria-labelledby="related-heading">
         <h2 id="related-heading" class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Related Articles</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
           <article v-for="rel in relatedPosts" :key="rel.id" class="card group">
@@ -147,7 +147,7 @@
             </div>
           </article>
         </div>
-      </section>
+      </section> -->
 
     </div>
 
@@ -248,15 +248,91 @@ function debounce(fn, delay) {
       <p>AI coding assistants are not silver bullets — they require good engineering judgement to use effectively. The developers who will benefit most are those who treat AI as a pair programmer rather than an oracle: collaborating, questioning, and verifying every suggestion.</p>
       <p>The tool that best augments your workflow depends on your context. Try each, combine them strategically, and measure the actual impact on your throughput and code quality. The efficiency ceiling for individual contributors has never been higher.</p>
     `
+  },
+  {
+    id: 2,
+    title: 'The Art of Clean CSS: Modern Techniques You Should Know',
+    category: { name: 'AI', slug: 'ai' },
+    author: {
+      id: 1,
+      name: 'Mohammad Azad',
+      initials: 'MSA',
+      role: 'IT Manager & Web Developer',
+      bio: 'Mohammad brings over a decade of IT experience to web development, exploring scalable UI/UX designs and robust backend patterns.'
+    },
+    date: 'March 28, 2026',
+    readingTime: 7,
+    views: '2.4k',
+    tags: ['AI', 'Developer Tools', 'Productivity', 'GitHub Copilot'],
+    toc: [
+      { id: 'introduction',       text: 'Introduction',                    level: 2 },
+      { id: 'the-shift',          text: 'The Shift in Development Workflow', level: 2 },
+      { id: 'tools-comparison',   text: 'Comparing the Major Tools',         level: 2 },
+      { id: 'copilot',            text: 'GitHub Copilot',                    level: 3 },
+      { id: 'cursor',             text: 'Cursor IDE',                        level: 3 },
+      { id: 'claude',             text: 'Claude & ChatGPT',                  level: 3 },
+      { id: 'best-practices',     text: 'Best Practices',                    level: 2 },
+      { id: 'conclusion',         text: 'Conclusion',                        level: 2 },
+    ],
+    content: `
+      <h2 id="introduction">Introduction</h2>
+      <p>The way software engineers write code is undergoing a fundamental transformation. AI-powered coding assistants have moved from novelty to indispensable tools in the span of just two years. But how much of the hype is real — and how do you actually integrate these tools into a professional workflow?</p>
+
+      <blockquote>AI coding assistants don't replace the engineer — they raise the floor of what a single engineer can accomplish.</blockquote>
+
+      <h2 id="the-shift">The Shift in Development Workflow</h2>
+      <p>The traditional development loop — think, type, test, debug — remains, but AI assistants now participate in each step. Autocomplete has evolved from single-word suggestions to complete function implementations, test generation, and even architectural recommendations.</p>
+      <p>Studies from GitHub show developers using Copilot complete tasks <strong>55% faster</strong> on average, particularly for boilerplate, repeated patterns, and unfamiliar APIs.</p>
+
+      <h2 id="tools-comparison">Comparing the Major Tools</h2>
+
+      <h3 id="copilot">GitHub Copilot</h3>
+      <p>GitHub Copilot, powered by OpenAI Codex, is deeply integrated into VS Code and JetBrains IDEs. Its strength lies in inline suggestion — it sees your file and produces contextually appropriate code without you leaving the editor.</p>
+
+      <pre><code>// Copilot can generate entire functions from a comment like this:
+// Function to debounce user input by N milliseconds
+function debounce(fn, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}</code></pre>
+
+      <h3 id="cursor">Cursor IDE</h3>
+      <p>Cursor takes a different approach — it's a full IDE fork of VS Code built AI-first. Its "composer" mode lets you prompt changes across multiple files simultaneously, which is transformative for refactoring.</p>
+
+      <h3 id="claude">Claude & ChatGPT</h3>
+      <p>These chat-first assistants excel at long-context reasoning. Upload an entire codebase, ask for a refactoring strategy, and receive a detailed, reasoned plan. They shine for architecture decisions, code review, and debugging complex issues.</p>
+
+      <h2 id="best-practices">Best Practices</h2>
+      <ul>
+        <li><strong>Always review generated code</strong> — treat AI output as a junior developer's first draft</li>
+        <li><strong>Write descriptive comments and function names</strong> — better context yields better suggestions</li>
+        <li><strong>Use AI for tests first</strong> — generation of unit tests is one of the highest-ROI use cases</li>
+        <li><strong>Don't paste secrets or PII</strong> — treat your AI assistant as a public-facing tool</li>
+        <li><strong>Combine tools</strong> — use Copilot for inline suggestions and Claude for architectural reasoning</li>
+      </ul>
+
+      <div class="prompt-block">
+        <pre>Act as a senior code reviewer. Review the following code for: bugs, security vulnerabilities, performance issues, and style concerns. Be specific. Include line references.
+
+[paste code here]</pre>
+      </div>
+
+      <h2 id="conclusion">Conclusion</h2>
+      <p>AI coding assistants are not silver bullets — they require good engineering judgement to use effectively. The developers who will benefit most are those who treat AI as a pair programmer rather than an oracle: collaborating, questioning, and verifying every suggestion.</p>
+      <p>The tool that best augments your workflow depends on your context. Try each, combine them strategically, and measure the actual impact on your throughput and code quality. The efficiency ceiling for individual contributors has never been higher.</p>
+    `
   }
 ];
 
 /* Fill in more posts as needed */
-const RELATED = [
-  { id:3,  title:'10 AI Prompts That Will Supercharge Your Productivity', category:{ name:'AI Prompts', slug:'prompts' }, date:'Mar 15, 2026', readingTime:5,  emoji:'⚡', bgColor:'bg-amber-50' },
-  { id:5,  title:'Understanding Large Language Models: A Visual Explainer', category:{ name:'Technology', slug:'technology' }, date:'Mar 5, 2026',  readingTime:11, emoji:'🧠', bgColor:'bg-purple-50' },
-  { id:8,  title:'Prompt Engineering Cheatsheet 2026', category:{ name:'AI Prompts', slug:'prompts' }, date:'Feb 20, 2026', readingTime:6,  emoji:'📋', bgColor:'bg-orange-50' },
-];
+// const RELATED = [
+//   { id:3,  title:'10 AI Prompts That Will Supercharge Your Productivity', category:{ name:'AI Prompts', slug:'prompts' }, date:'Mar 15, 2026', readingTime:5,  emoji:'⚡', bgColor:'bg-amber-50' },
+//   { id:5,  title:'Understanding Large Language Models: A Visual Explainer', category:{ name:'Technology', slug:'technology' }, date:'Mar 5, 2026',  readingTime:11, emoji:'🧠', bgColor:'bg-purple-50' },
+//   { id:8,  title:'Prompt Engineering Cheatsheet 2026', category:{ name:'AI Prompts', slug:'prompts' }, date:'Feb 20, 2026', readingTime:6,  emoji:'📋', bgColor:'bg-orange-50' },
+// ];
 
 createApp({
   components: { NavBar: window.NavBar, SiteFooter: window.SiteFooter },
