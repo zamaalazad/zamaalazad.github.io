@@ -15,10 +15,10 @@ const SiteFooter = {
 
       /** Social links — easily extensible */
       socials: [
-        { label: 'Twitter / X', href: '#', icon: 'twitter' },
-        { label: 'GitHub',      href: '#', icon: 'github' },
-        { label: 'LinkedIn',    href: '#', icon: 'linkedin' },
-        { label: 'RSS Feed',    href: '#', icon: 'rss' },
+        { label: 'Twitter / X', href: 'https://x.com/zamaalazad', target: '_blank', icon: 'twitter' },
+        { label: 'GitHub',      href: 'https://github.com/zamaalazad', target: '_blank', icon: 'github' },
+        { label: 'LinkedIn',    href: 'https://bh.linkedin.com/in/muhammad-shahjamal-azad-84877720', target: '_blank', icon: 'linkedin' },
+        { label: 'RSS Feed',    href: 'https://zamaalazad.github.io/feed.xml', target: '_blank', icon: 'rss' },
       ],
 
       /** Footer nav columns */
@@ -133,7 +133,7 @@ const SiteFooter = {
             <ul class="space-y-2.5 list-none" role="list">
               <li v-for="link in col.links" :key="link.label">
                 <a :href="getLink(link.href)"
-                   class="text-slate-400 text-sm hover:text-indigo-400 transition-colors">
+                   class="text-slate-400 text-sm hover:text-indigo-400 transition-colors" >
                   {{ link.label }}
                 </a>
               </li>
@@ -151,6 +151,7 @@ const SiteFooter = {
           <div class="flex items-center gap-3">
             <a v-for="s in socials" :key="s.label"
                :href="s.href"
+               :target="s.target"
                :aria-label="s.label"
                class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:bg-slate-700 transition-all">
               <span v-html="getIcon(s.icon)"></span>
