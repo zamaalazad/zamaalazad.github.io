@@ -25,7 +25,6 @@ const NavBar = {
       links: [
         { label: 'Main',       href: '/index.html',          path: '/' },
         { label: 'Articles',   href: '/pages/blog.html',     path: 'blog' },
-        { label: 'Categories', href: '/pages/category.html', path: 'category' },
         { label: 'About',      href: '/pages/about.html',    path: 'about' },
         { label: 'Contact',    href: '/pages/contact.html',  path: 'contact' },
       ]
